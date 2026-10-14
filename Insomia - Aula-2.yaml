@@ -1,0 +1,176 @@
+
+type: collection.insomnia.rest/5.0
+schema_version: "5.1"
+name: UFF
+meta:
+  id: wrk_95854b5c28234682acd2f92b6e38d197
+  created: 1786653803163
+  modified: 1786653803163
+  description: ""
+collection:
+  - url: http://localhost:3333/api/v1/pokemons
+    name: Listar todos
+    meta:
+      id: req_eb3d95ead7ff40f99fdbfaabeb42a498
+      created: 1786653826742
+      modified: 1786658515958
+      isPrivate: false
+      description: ""
+      sortKey: -1786653849632
+    method: GET
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:3333/api/v1/pokemons
+    name: Listar por tipo
+    meta:
+      id: req_86d34bc12cb54467a35b5e15f29dcd4b
+      created: 1786653849532
+      modified: 1786658567701
+      isPrivate: false
+      description: ""
+      sortKey: -1786653849532
+    method: GET
+    parameters:
+      - name: type
+        value: Fire
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:3333/api/v1/pokemons/1
+    name: Listar por id
+    meta:
+      id: req_834144a2a529435285eb7e51a99cb6cc
+      created: 1786653883142
+      modified: 1786654033756
+      isPrivate: false
+      description: ""
+      sortKey: -1786653849432
+    method: GET
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:3333/api/v1/pokemons
+    name: Criar pokémon
+    meta:
+      id: req_9a4b13067cbf4256b5202f042d8170c7
+      created: 1786653898967
+      modified: 1786658603546
+      isPrivate: false
+      description: ""
+      sortKey: -1786653849332
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"id": "25",
+        	"name": "Pikachu",
+        	"type": "Electric",
+        	"hp": 35
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:3333/api/v1/pokemons/25
+    name: Remover por id
+    meta:
+      id: req_0caee1d6197b42e9bdd0fac61590d5ec
+      created: 1786653910585
+      modified: 1786658671034
+      isPrivate: false
+      description: ""
+      sortKey: -1786653849232
+    method: DELETE
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:3333/api/v1/pokemons/1
+    name: Atualizar por id
+    meta:
+      id: req_1c824a3831ea407cbc2fc298dd6561ea
+      created: 1786653932745
+      modified: 1786658684192
+      isPrivate: false
+      description: ""
+      sortKey: -1786653849132
+    method: PUT
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"name": "Bulbasaur Evoluído",
+        	"type": "Grass/Poison",
+        	"hp": 60
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:3333/api/v1/pokemons/stats
+    name: Listar status da api
+    meta:
+      id: req_dcb78bc83b4f4e9c867b8e4fbea65fd4
+      created: 1786653986779
+      modified: 1786658720064
+      isPrivate: false
+      description: ""
+      sortKey: -1786653849032
+    method: GET
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_bfaeebfbf3b43e37cc9bf41534860d54a8d536e2
+    created: 1786653803167
+    modified: 1786653803167
+environments:
+  name: Base Environment
+  meta:
+    id: env_bfaeebfbf3b43e37cc9bf41534860d54a8d536e2
+    created: 1786653803166
+    modified: 1786653803166
+    isPrivate: false
