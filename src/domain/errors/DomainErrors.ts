@@ -21,3 +21,27 @@ export class ExternalServiceError extends AppError {
         super(message, 502, "EXTERNAL_SERVICE_ERROR");
     }
 }
+
+export class UnauthorizedError extends AppError {
+    constructor(message = "Não autenticado.", code = "UNAUTHORIZED") {
+        super(message, 401, code);
+    }
+}
+
+export class ForbiddenError extends AppError {
+    constructor(message = "Você não tem permissão para realizar esta ação.") {
+        super(message, 403, "FORBIDDEN");
+    }
+}
+
+export class ConflictError extends AppError {
+    constructor(message = "Conflito com o estado atual do recurso.", code = "CONFLICT") {
+        super(message, 409, code);
+    }
+}
+
+export class TooManyRequestsError extends AppError {
+    constructor(message = "Muitas requisições. Tente novamente mais tarde.") {
+        super(message, 429, "TOO_MANY_REQUESTS");
+    }
+}

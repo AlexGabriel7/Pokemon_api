@@ -36,6 +36,10 @@ export class PrismaPokemonRepository implements IPokemonRepository {
         return toDomain(row);
     }
 
+    async delete(id: number): Promise<void> {
+        await this.prisma.pokemon.delete({ where: { id } });
+    }
+
     async findActiveByTrainerId(trainerId: string): Promise<Pokemon[]> {
         const rows = await this.prisma.pokemon.findMany({
             where: { trainerId, active: true },

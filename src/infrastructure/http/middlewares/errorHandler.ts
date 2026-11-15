@@ -39,6 +39,15 @@ export const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
         return;
     }
 
+    // Corpo maior que o limite do express.json()
+    if (err?.type === "entity.too.large") {
+        res.status(413).json({
+            error: { code: "PAYLOAD_TOO_LARGE", message: "O corpo da requisição é grande demais." },
+        });
+        return;
+    }
+
+    // Nunca devolvemos stack trace nem detalhes internos ao cliente.
     console.error(err);
     res.status(500).json({
         error: { code: "INTERNAL_SERVER_ERROR", message: "Erro interno do servidor." },

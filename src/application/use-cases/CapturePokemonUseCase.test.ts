@@ -10,7 +10,6 @@ import {
     InMemoryTrainerRepository,
 } from "../../infrastructure/repositories/InMemoryPokemonRepository";
 import { CapturePokemonUseCase } from "./CapturePokemonUseCase";
-import { CreateTrainerUseCase } from "./CreateTrainerUseCase";
 import { GetTrainerTeamUseCase } from "./GetTrainerTeamUseCase";
 
 class FakeGateway implements IPokeApiGateway {
@@ -28,7 +27,10 @@ function setup() {
     const pokemons = new InMemoryPokemonRepository();
     const gateway = new FakeGateway();
     return {
-        createTrainer: new CreateTrainerUseCase(trainers),
+        createTrainer: {
+            execute: ({ name }: { name: string }) =>
+                trainers.create({ name, email: `${name.toLowerCase()}@example.com`, passwordHash: "hash" }),
+        },
         capture: new CapturePokemonUseCase(trainers, pokemons, gateway),
         team: new GetTrainerTeamUseCase(trainers, pokemons),
     };

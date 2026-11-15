@@ -1,10 +1,10 @@
+// Deve ser o primeiro import: valida o .env antes de qualquer outra coisa subir.
+import { env } from "../infrastructure/config/env";
 import app from "./app";
 import { prisma } from "../infrastructure/database/prisma";
 
-const PORT = Number(process.env.PORT) || 3333;
-
-const server = app.listen(PORT, () => {
-    console.log(`Servidor rodando em http://localhost:${PORT}`);
+const server = app.listen(env.port, () => {
+    console.log(`Servidor rodando em http://localhost:${env.port}`);
 });
 
 const shutdown = async () => {

@@ -8,10 +8,29 @@ datasource db {
 }
 
 model Trainer {
+  id           String         @id @default(uuid())
+  name         String
+  email        String         @unique
+  passwordHash String
+  // "TRAINER" | "GYM_LEADER" | "ADMIN" (validado na aplicação)
+  role         String         @default("TRAINER")
+  createdAt    DateTime       @default(now())
+  pokemons     Pokemon[]
+  refreshTokens RefreshToken[]
+}
+
+model RefreshToken {
   id        String    @id @default(uuid())
-  name      String
+  // Guardamos só o hash (SHA-256): se o banco vazar, os tokens não podem ser usados
+  tokenHash String    @unique
+  expiresAt DateTime
+  revokedAt DateTime?
   createdAt DateTime  @default(now())
-  pokemons  Pokemon[]
+
+  trainerId String
+  trainer   Trainer @relation(fields: [trainerId], references: [id], onDelete: Cascade)
+
+  @@index([trainerId])
 }
 
 model Pokemon {

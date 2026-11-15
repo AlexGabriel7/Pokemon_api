@@ -1,9 +1,12 @@
 import { NewPokemonProps, Pokemon } from "../../domain/entities/pokemon";
+import { RefreshToken } from "../../domain/entities/refreshToken";
+import { Role } from "../../domain/entities/role";
 import { Trainer } from "../../domain/entities/trainer";
 import { IPokemonRepository } from "../../domain/repositories/IPokemonRepository";
-import { ITrainerRepository } from "../../domain/repositories/ITrainerRepository";
+import { IRefreshTokenRepository } from "../../domain/repositories/IRefreshTokenRepository";
+import { ITrainerRepository, NewTrainerData } from "../../domain/repositories/ITrainerRepository";
 
-/** Implementação em memória, útil para testes (não é mais usada pela aplicação). */
+/** Implementações em memória, usadas nos testes (a aplicação usa as versões Prisma). */
 export class InMemoryPokemonRepository implements IPokemonRepository {
     private pokemons: Pokemon[] = [];
     private nextId = 1;
@@ -29,6 +32,10 @@ export class InMemoryPokemonRepository implements IPokemonRepository {
         return pokemon;
     }
 
+    async delete(id: number): Promise<void> {
+        this.pokemons = this.pokemons.filter(p => p.id !== id);
+    }
+
     async findActiveByTrainerId(trainerId: string): Promise<Pokemon[]> {
         return this.pokemons.filter(p => p.trainerId === trainerId && p.active);
     }
@@ -41,10 +48,13 @@ export class InMemoryPokemonRepository implements IPokemonRepository {
 export class InMemoryTrainerRepository implements ITrainerRepository {
     private trainers: Trainer[] = [];
 
-    async create(data: { name: string }): Promise<Trainer> {
+    async create(data: NewTrainerData): Promise<Trainer> {
         const trainer = new Trainer({
             id: crypto.randomUUID(),
             name: data.name,
+            email: data.email,
+            passwordHash: data.passwordHash,
+            role: data.role ?? "TRAINER",
             createdAt: new Date(),
         });
         this.trainers.push(trainer);
@@ -53,5 +63,46 @@ export class InMemoryTrainerRepository implements ITrainerRepository {
 
     async findById(id: string): Promise<Trainer | undefined> {
         return this.trainers.find(t => t.id === id);
+    }
+
+    async findByEmail(email: string): Promise<Trainer | undefined> {
+        return this.trainers.find(t => t.email === email);
+    }
+
+    async updateRole(id: string, role: Role): Promise<Trainer> {
+        const trainer = this.trainers.find(t => t.id === id);
+        if (!trainer) throw new Error("trainer not found");
+        trainer.role = role;
+        return trainer;
+    }
+}
+
+export class InMemoryRefreshTokenRepository implements IRefreshTokenRepository {
+    private tokens: RefreshToken[] = [];
+
+    async create(data: { trainerId: string; tokenHash: string; expiresAt: Date }): Promise<RefreshToken> {
+        const token = new RefreshToken({
+            id: crypto.randomUUID(),
+            ...data,
+            revokedAt: null,
+            createdAt: new Date(),
+        });
+        this.tokens.push(token);
+        return token;
+    }
+
+    async findByTokenHash(tokenHash: string): Promise<RefreshToken | undefined> {
+        return this.tokens.find(t => t.tokenHash === tokenHash);
+    }
+
+    async revoke(id: string): Promise<void> {
+        const token = this.tokens.find(t => t.id === id);
+        if (token) token.revokedAt = new Date();
+    }
+
+    async revokeAllByTrainerId(trainerId: string): Promise<void> {
+        for (const token of this.tokens) {
+            if (token.trainerId === trainerId && !token.revokedAt) token.revokedAt = new Date();
+        }
     }
 }
